@@ -20,14 +20,21 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    '''
     @app.route('/hola')
     def hola():
         return 'ie'
-
+    '''
+    
     from . import db
     db.init_app(app)
 
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import mapa
+    app.register_blueprint(mapa.bp)
+    
+    app.add_url_rule('/', endpoint='index')
 
     return app

@@ -1,19 +1,19 @@
-DROP TABLE IF EXISTS ble;
+DROP TABLE IF EXISTS devices;
 DROP TABLE IF EXISTS datatypes;
 DROP TABLE IF EXISTS user;
 
-CREATE TABLE ble (
+CREATE TABLE devices (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  address TEXT UNIQUE NOT NULL,
-  advtype TEXT NOT NULL,
-  rssi INTEGER NOT NULL,
-  timestamp TIMESTAMP NOT NULL
+  mac TEXT UNIQUE NOT NULL,
+  type TEXT NOT NULL,
+  rssi INTEGER NOT NULL
 );
 
 CREATE TABLE datatypes (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
+  type INTEGER NOT NULL, 
   raw TEXT NOT NULL,
-  FOREIGN KEY (id) REFERENCES ble (id)
+  FOREIGN KEY (id) REFERENCES devices (id)
 );
 
 CREATE TABLE user (
@@ -21,3 +21,5 @@ CREATE TABLE user (
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
 );
+
+INSERT INTO devices as d (mac, type, rssi) VALUES ('C1:BB:C2:C9:71:5E', 'ConnectableUndirected', -56)
