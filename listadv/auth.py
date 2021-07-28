@@ -29,18 +29,19 @@ def register():
 
         if error is None:
             db.execute(
-                'INSERT INTO user (username, password) VALUES (?. ?)',
+                'INSERT INTO user (username, password) VALUES (?, ?)',
                 (username, generate_password_hash(password))
             )
             db.commit()
             return redirect(url_for('auth.login'))
 
-        flask(error)
+        flash(error)
 
     return render_template('auth/register.html')
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    print(url_for('static', filename='style.css'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -48,7 +49,7 @@ def login():
         error = None
 
         user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username)
+            'SELECT * FROM user WHERE username = ?', (username,)
         ).fetchone()
 
         if not user:
@@ -61,9 +62,9 @@ def login():
             session['user_id'] = user['id']
             return redirect(url_for('index'))
 
-        flask(error)
+        flash(error)
 
-    return render_template('auth/register.html')
+    return render_template('auth/login.html')
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -73,7 +74,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id)
+            'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
 
 @bp.route('/logout')
