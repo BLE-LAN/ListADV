@@ -6,13 +6,13 @@ from werkzeug.exceptions import abort
 from listadv.auth import login_required
 from listadv.db import get_db
 
-bp = Blueprint('mapa', __name__)
+bp = Blueprint('mapa', __name__, url_prefix='/mapa')
 
-@bp.route('/')
-def index():
+@bp.route('/lista', methods=('GET', 'POST'))
+def lista():
     db = get_db()
     devices = db.execute(
         'SELECT mac, type, rssi'
         ' FROM devices'
     ).fetchall()
-    return render_template('mapa/index.html', devices=devices)
+    return render_template('mapa/lista.html', devices=devices)

@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask
-
+from flask import render_template
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -21,11 +21,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    '''
-    @app.route('/hola')
-    def hola():
-        return 'ie'
-    '''
+    @app.route('/')
+    def index():
+        return render_template('index.html')
     
     from . import db
     db.init_app(app)
