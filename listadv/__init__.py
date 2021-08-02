@@ -1,8 +1,8 @@
 import os
 
-from flask import Flask
-from flask import render_template
-from flask import make_response
+from flask import (
+    Flask, render_template, make_response
+)
 
 from flask_jwt_extended import JWTManager
 

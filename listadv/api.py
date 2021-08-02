@@ -1,15 +1,10 @@
 from flask import (
-    Blueprint, flash, g, request, session, url_for, current_app
+    Blueprint, request, jsonify
 )
 
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
-from flask_jwt_extended import create_access_token
-
-from flask import jsonify
-
-from listadv.db import get_db
+from flask_jwt_extended import (
+    get_jwt_identity, jwt_required, create_access_token
+)
 
 from . import auth
 
