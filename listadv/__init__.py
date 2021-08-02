@@ -2,6 +2,9 @@ import os
 
 from flask import Flask
 from flask import render_template
+from flask import make_response
+
+from flask_jwt_extended import JWTManager
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -24,6 +27,15 @@ def create_app(test_config=None):
     @app.route('/')
     def index():
         return render_template('index.html')
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+        resp = make_response(render_template('404.html'), 404)
+        resp.headers['X-Something'] = 'A value'
+        return resp
+
+    jwt = JWTManager()
+    jwt.init_app(app)
     
     from . import db
     db.init_app(app)
@@ -33,6 +45,9 @@ def create_app(test_config=None):
 
     from . import mapa
     app.register_blueprint(mapa.bp)
+
+    from . import api
+    app.register_blueprint(api.bp)
     
     app.add_url_rule('/', endpoint='index')
 

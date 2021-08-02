@@ -82,7 +82,6 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -92,3 +91,19 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+def checklogin(username, password):
+    db = get_db()
+    error = None
+
+    user = db.execute(
+        'SELECT * FROM user WHERE username = ?', (username,)
+    ).fetchone()
+
+    if not user:
+        error = 'Incorrect username'
+    elif not check_password_hash(user['password'], password):
+        error = 'Incorrect password'
+
+    return error
