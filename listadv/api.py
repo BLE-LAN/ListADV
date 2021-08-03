@@ -1,30 +1,70 @@
 from flask import (
-    Blueprint, request, jsonify
+    Blueprint, request, jsonify, current_app
 )
 
 from flask_jwt_extended import (
     get_jwt_identity, jwt_required, create_access_token
 )
 
-from . import auth
+# jwt es un JWTManager instanciado en __init__
+# no se me ha occurido una forma "elegante" de obtenerla
+from . import (
+    auth, jwt_ptr 
+)
+
+from listadv.db import get_db
+from . import util
+
+import redis
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
-@bp.route('/login', methods=('GET', 'POST'))
+@bp.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        username = request.json.get("username", None)
-        password = request.json.get("password", None)
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
 
-        error = auth.checklogin(username, password)
-        
-        if error is None:
-            access_token = create_access_token(identity=username)
-            return jsonify(access_token=access_token)
+    error = auth.checklogin(username, password)
+    
+    if error is not None:
+        return jsonify("Wrong username or password"), 401
+    
+    db = get_db()
 
-    return jsonify("Wrong username or password"), 401
+    row = db.execute(
+        'SELECT jti FROM user WHERE username = ?', (username,)
+    ).fetchone()
+    
+    if row['jti'] is None:
+        token = create_access_token(identity=username)
+
+        db.execute(
+            'UPDATE user SET jti = ? WHERE username = ?',
+            (token, username)
+        )
+        db.commit()
+        return jsonify(access_token=token)
+    
+    return jsonify(access_token=row['jti'])
+
 
 @bp.route('/adddevices', methods=('GET', 'POST'))
 @jwt_required()
 def adddevices():
     return "hola"
+
+
+@jwt_ptr.expired_token_loader
+def remove_expired_token(jwt_header, jwt_payload):
+    
+    jti = util.encode_jwt(jwt_header, jwt_payload)
+    db = get_db()
+
+    db.execute(
+        'UPDATE user SET jti = ? WHERE jti = ?',
+        (None, jti)
+    )
+
+    db.commit()
+
+    return jsonify("Token has expired"), 401

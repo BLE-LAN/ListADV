@@ -1,17 +1,24 @@
 import os
 
+from datetime import timedelta
+
 from flask import (
     Flask, render_template, make_response
 )
 
 from flask_jwt_extended import JWTManager
 
+jwt_ptr = JWTManager()
+
 def create_app(test_config=None):
+    
+    ACCESS_EXPIRES = timedelta(seconds=60*10)
+    
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'listadv.sqlite'),
-        SEND_FILE_MAX_AGE_DEFAULT = 0
+        JWT_ACCESS_TOKEN_EXPIRES = ACCESS_EXPIRES
     )
 
     if test_config is None:
@@ -33,9 +40,6 @@ def create_app(test_config=None):
         resp = make_response(render_template('404.html'), 404)
         resp.headers['X-Something'] = 'A value'
         return resp
-
-    jwt = JWTManager()
-    jwt.init_app(app)
     
     from . import db
     db.init_app(app)
@@ -50,5 +54,8 @@ def create_app(test_config=None):
     app.register_blueprint(api.bp)
     
     app.add_url_rule('/', endpoint='index')
+
+
+    jwt_ptr.init_app(app)
 
     return app
