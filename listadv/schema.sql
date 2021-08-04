@@ -20,7 +20,7 @@ CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  jti TEXT UNIQUE
+  token TEXT UNIQUE
 );
 
 INSERT INTO devices as d (mac, type, rssi) VALUES ('C1:BB:C2:C9:71:5E', 'ConnectableUndirected', -56)

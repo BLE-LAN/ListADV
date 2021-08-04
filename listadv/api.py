@@ -32,20 +32,20 @@ def login():
     db = get_db()
 
     row = db.execute(
-        'SELECT jti FROM user WHERE username = ?', (username,)
+        'SELECT token FROM user WHERE username = ?', (username,)
     ).fetchone()
     
-    if row['jti'] is None:
+    if row['token'] is None:
         token = create_access_token(identity=username)
 
         db.execute(
-            'UPDATE user SET jti = ? WHERE username = ?',
+            'UPDATE user SET token = ? WHERE username = ?',
             (token, username)
         )
         db.commit()
         return jsonify(access_token=token)
     
-    return jsonify(access_token=row['jti'])
+    return jsonify(access_token=row['token'])
 
 
 @bp.route('/adddevices', methods=('GET', 'POST'))
@@ -57,12 +57,12 @@ def adddevices():
 @jwt_ptr.expired_token_loader
 def remove_expired_token(jwt_header, jwt_payload):
     
-    jti = util.encode_jwt(jwt_header, jwt_payload)
+    token = util.encode_jwt(jwt_header, jwt_payload)
     db = get_db()
 
     db.execute(
-        'UPDATE user SET jti = ? WHERE jti = ?',
-        (None, jti)
+        'UPDATE user SET token = ? WHERE token = ?',
+        (None, token)
     )
 
     db.commit()
