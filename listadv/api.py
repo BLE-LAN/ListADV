@@ -17,6 +17,10 @@ from . import util
 
 import redis
 
+from flask_expects_json import expects_json
+
+
+
 bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/login', methods=['POST'])
@@ -47,11 +51,47 @@ def login():
     
     return jsonify(access_token=row['token'])
 
+schema = {
+  "type": "object",
+  "properties": {
+    "devices": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/device" }
+    }
+  },
+  "$defs": {
+    "device": {
+      "type": "object",
+      "required": [ "address", "advtype", "RSSI", "timestamp"],
+      "properties": {
+        "address": {
+          "type": "string",
+        },
+        "advtype": {
+          "type": "string",
+        },
+        "RSSI": {
+          "type": "integer",
+          "maximum": 0
+        },
+        "timestamp": {
+          "type": "string",
+        }
+      }
+    }
+  }
+}
 
-@bp.route('/adddevices', methods=('GET', 'POST'))
+
+@bp.route('/adddevices', methods=['POST'])
 @jwt_required()
+@expects_json(schema)
 def adddevices():
-    return "hola"
+    try:
+        request_data = request.json
+    except NotUniqueError as e:
+        return jsonify(dict(message=e.message)), 409
+    return request_data
 
 
 @jwt_ptr.expired_token_loader

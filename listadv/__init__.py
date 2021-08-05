@@ -12,7 +12,7 @@ jwt_ptr = JWTManager()
 
 def create_app(test_config=None):
     
-    ACCESS_EXPIRES = timedelta(seconds=60*10)
+    ACCESS_EXPIRES = timedelta(seconds=600*10)
     
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
