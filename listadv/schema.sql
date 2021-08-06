@@ -4,9 +4,10 @@ DROP TABLE IF EXISTS user;
 
 CREATE TABLE devices (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  mac TEXT UNIQUE NOT NULL,
-  type TEXT NOT NULL,
-  rssi INTEGER NOT NULL
+  address TEXT UNIQUE NOT NULL,
+  advtype TEXT NOT NULL,
+  rssi INTEGER NOT NULL,
+  timestamp TEXT NOT NULL
 );
 
 CREATE TABLE datatypes (
@@ -23,4 +24,4 @@ CREATE TABLE user (
   token TEXT UNIQUE
 );
 
-INSERT INTO devices as d (mac, type, rssi) VALUES ('C1:BB:C2:C9:71:5E', 'ConnectableUndirected', -56)
+INSERT INTO devices as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:5E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021')

@@ -14,7 +14,7 @@ def lista():
     if session.get('user_id') is not None:
         db = get_db()
         devices = db.execute(
-            'SELECT mac, type, rssi'
+            'SELECT address, advtype, rssi, timestamp'
             ' FROM devices'
         ).fetchall()
         return render_template('mapa/lista.html', devices=devices)
