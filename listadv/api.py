@@ -6,22 +6,22 @@ from flask_jwt_extended import (
 	get_jwt_identity, jwt_required, create_access_token
 )
 
-# jwt es un JWTManager instanciado en __init__
-# no se me ha occurido una forma "elegante" de obtenerla
+# jwt_ptr es un JWTManager instanciado en __init__
 from . import (
-		auth, jwt_ptr 
+	auth, jwt_ptr 
 )
 
 from listadv.db import get_db
-from . import util
+from listadv import util
+from listadv.db_access import *
 
 import redis
 
 from flask_expects_json import expects_json
 
 
-
 bp = Blueprint('api', __name__, url_prefix='/api')
+
 
 @bp.route('/login', methods=['POST'])
 def login():
@@ -34,22 +34,16 @@ def login():
 		return jsonify("Wrong username or password"), 401
 	
 	db = get_db()
-
-	row = db.execute(
-		'SELECT token FROM user WHERE username = ?', (username,)
-	).fetchone()
 	
-	if row['token'] is None:
+	usertoken = getTokenByUsername(username)
+	
+	if usertoken is None:
 		token = create_access_token(identity=username)
-
-		db.execute(
-			'UPDATE user SET token = ? WHERE username = ?',
-			(token, username)
-		)
-		db.commit()
+		setTokenByUsername(token, username)
 		return jsonify(access_token=token)
 	
-	return jsonify(access_token=row['token'])
+	return jsonify(access_token=usertoken)
+
 
 schema = {
 	"type": "object",
@@ -82,7 +76,6 @@ schema = {
 	}
 }
 
-
 @bp.route('/adddevices', methods=['POST'])
 @jwt_required()
 @expects_json(schema)
@@ -96,39 +89,20 @@ def adddevices():
 	devices = request_data['devices']
 
 	for device in devices:
-		row = db.execute(
-			'SELECT id FROM device WHERE address = ?', (device['address'],)
-		).fetchone()
 
-		if row is not None:
-			db.execute(
-				'UPDATE device' 
-				' SET rssi = ?, timestamp = ?'
-				' WHERE id = ?',
-				(device['rssi'], device['timestamp'], row['id'])
-			)
+		deviceId = getDeviceIdByAddress(device['address'])
+
+		if deviceId is not None:
+			updateDevice(deviceId, device['rssi'], device['timestamp'])
+
 		else:
-			db.execute(
-				'INSERT INTO device (address, advtype, rssi, timestamp)'
-				' VALUES (?, ?, ?, ?)', 
-				(device['address'], device['advtype'], device['rssi'], device['timestamp'])
-			)
+			insertDevice(device['address'], device['advtype'], device['rssi'], device['timestamp'])
 
-			db.commit()
-
-			deviceId = db.execute(
-				'SELECT last_insert_rowid()'
-			)
-
-			deviceID = deviceId.lastrowid
+			deviceID = lastInsertRowId()
 
 			# Insertar tipos desconocidos (dados en raw)
 			for unkown in device['unknows']:
-				db.execute(
-					'INSERT INTO datatype (device, type, raw)'
-					' VALUES (?, ?, ?)', 
-					(deviceID, unkown['type'], unkown['raw'])
-				)
+				insertDataType(deviceID, unkown['type'], unkown['raw'])
 
 			# Insertar tipos conocidos
 			datatypes_dic = {
@@ -145,30 +119,13 @@ def adddevices():
 
 			for key in datatypes_dic.keys():
 				value = datatypes_dic[key]
-				if len(value) > 0: 
-					db.execute(
-						'INSERT INTO datatype (device, type, raw)'
-						' VALUES (?, ?, ?)', 
-						(deviceID, key, value)
-					)
-
-			print(datatypes_dic)
-
-		db.commit()
+				if len(value) > 0:
+					insertDataType(deviceID, key, value)
 
 	return request_data
 
 @jwt_ptr.expired_token_loader
 def remove_expired_token(jwt_header, jwt_payload):
-	
 	token = util.encode_jwt(jwt_header, jwt_payload)
-	db = get_db()
-
-	db.execute(
-		'UPDATE user SET token = ? WHERE token = ?',
-		(None, token)
-	)
-
-	db.commit()
-
+	updateUserToken(None, token)
 	return jsonify("Token has expired"), 401
