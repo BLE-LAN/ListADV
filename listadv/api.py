@@ -97,27 +97,66 @@ def adddevices():
 
 	for device in devices:
 		row = db.execute(
-			'SELECT id FROM devices WHERE address = ?', (device['address'],)
+			'SELECT id FROM device WHERE address = ?', (device['address'],)
 		).fetchone()
-		
+
 		if row is not None:
 			db.execute(
-				'UPDATE devices' 
-				' SET advtype = ?, rssi = ?, timestamp = ?'
+				'UPDATE device' 
+				' SET rssi = ?, timestamp = ?'
 				' WHERE id = ?',
-				(device['advtype'], device['rssi'], device['timestamp'], row['id'])
+				(device['rssi'], device['timestamp'], row['id'])
 			)
 		else:
 			db.execute(
-				'INSERT INTO devices (address, advtype, rssi, timestamp)'
+				'INSERT INTO device (address, advtype, rssi, timestamp)'
 				' VALUES (?, ?, ?, ?)', 
 				(device['address'], device['advtype'], device['rssi'], device['timestamp'])
 			)
 
-	db.commit()
+			db.commit()
+
+			deviceId = db.execute(
+				'SELECT last_insert_rowid()'
+			)
+
+			deviceID = deviceId.lastrowid
+
+			# Insertar tipos desconocidos (dados en raw)
+			for unkown in device['unknows']:
+				db.execute(
+					'INSERT INTO datatype (device, type, raw)'
+					' VALUES (?, ?, ?)', 
+					(deviceID, unkown['type'], unkown['raw'])
+				)
+
+			# Insertar tipos conocidos
+			datatypes_dic = {
+				'completename' : '',
+				'uuids' : ''
+			}
+
+			if 'completename' in device:
+				datatypes_dic['completename'] = device['completename']
+
+			if 'uuids' in device:
+					for uuid in device['uuids']:
+						datatypes_dic['uuids'] += uuid + ' '
+
+			for key in datatypes_dic.keys():
+				value = datatypes_dic[key]
+				if len(value) > 0: 
+					db.execute(
+						'INSERT INTO datatype (device, type, raw)'
+						' VALUES (?, ?, ?)', 
+						(deviceID, key, value)
+					)
+
+			print(datatypes_dic)
+
+		db.commit()
 
 	return request_data
-
 
 @jwt_ptr.expired_token_loader
 def remove_expired_token(jwt_header, jwt_payload):

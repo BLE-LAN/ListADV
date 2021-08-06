@@ -10,7 +10,12 @@
       <header>
         <div>
           <h1>{{ device['address'] }}</h1>
-          <div class="about">type {{ device['advtype'] }} rssi {{ device['rssi'] }} on {{ device['timestamp'] }}</div>
+          <div class="about">
+            advtype {{ device['advtype'] }} <br>
+            rssi {{ device['rssi'] }} <br>
+            timestamp {{ device['timestamp'] }} <br>
+
+          </div>
         </div>
       </header>
     </article>

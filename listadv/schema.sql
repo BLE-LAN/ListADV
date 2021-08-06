@@ -1,8 +1,8 @@
-DROP TABLE IF EXISTS devices;
-DROP TABLE IF EXISTS datatypes;
+DROP TABLE IF EXISTS device;
+DROP TABLE IF EXISTS datatype;
 DROP TABLE IF EXISTS user;
 
-CREATE TABLE devices (
+CREATE TABLE device (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   address TEXT UNIQUE NOT NULL,
   advtype TEXT NOT NULL,
@@ -10,11 +10,12 @@ CREATE TABLE devices (
   timestamp TEXT NOT NULL
 );
 
-CREATE TABLE datatypes (
+CREATE TABLE datatype (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  type INTEGER NOT NULL, 
+  device INTEGER NOT NULL,
+  type TEXT NOT NULL, 
   raw TEXT NOT NULL,
-  FOREIGN KEY (id) REFERENCES devices (id)
+  FOREIGN KEY(device) REFERENCES device(id)
 );
 
 CREATE TABLE user (
@@ -24,4 +25,4 @@ CREATE TABLE user (
   token TEXT UNIQUE
 );
 
-INSERT INTO devices as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:5E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021')
+INSERT INTO device as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:5E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021')

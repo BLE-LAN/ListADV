@@ -15,7 +15,7 @@ def lista():
         db = get_db()
         devices = db.execute(
             'SELECT address, advtype, rssi, timestamp'
-            ' FROM devices'
+            ' FROM device'
         ).fetchall()
         return render_template('mapa/lista.html', devices=devices)
     else:
