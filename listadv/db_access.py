@@ -112,5 +112,4 @@ def getDataTypeByDeviceID(device_id):
     )
 
     datatypes = cursor.fetchall()
-    print(datatypes)
     return datatypes

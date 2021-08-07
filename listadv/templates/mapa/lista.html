@@ -7,41 +7,32 @@
 {% block content %}
 
 
-<button onclick="obtener_detalle(this)" value="10">Do Flip</button>
+ 
 
-  {% for device in devices %}
-    <article class="device">
-      <header>
-        <div>
-          <h1>{{ device['address'] }}</h1>
-          <div class="about">
-            advtype {{ device['advtype'] }} <br>
-            rssi {{ device['rssi'] }} <br>
-            timestamp {{ device['timestamp'] }}
-          </div>
-        </div>
-      </header>
-    </article>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
-
-<script type="text/javascript">
-  function obtener_detalle(objButton) {
-    let device_id = objButton.value
-    let div_detalle = document.getElementById("contenidoDetalle");
-    $.ajax({
-        type: 'POST',
-        url: '/mapa/lista/detalle/' + device_id,
-        success: function (response) {
-          div_detalle.innerHTML = response
-          div_detalle.hidden = false
-        },
-        error: function () { console.log(error) }
-    }); 
-  }
-</script>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Address</th>
+        <th scope="col">Type</th>
+        <th scope="col">RSSI</th>
+        <th scope="col">Timestamp</th>
+        <th scope="col">Data Types</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for device in devices %}
+        <tr>
+          <th scope="row">{{ device['address'] }}</th>
+          <td>{{ device['advtype'] }}</td>
+          <td>{{ device['rssi'] }}</td>
+          <td>{{ device['timestamp'] }}</td>
+          <td>
+            <button onclick="obtener_detalle(this)" value="{{ device['id'] }}">Do Flip</button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}
 

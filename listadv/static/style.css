@@ -128,4 +128,5 @@ input[type=submit] {
 .thisIsAButton:hover {
     background: linear-gradient(to bottom, #634b30 5%, #c08103 100%);
     background: -webkit-linear-gradient(to bottom, #634b30 5%, #c08103 100%);
+    text-decoration: none;
 }

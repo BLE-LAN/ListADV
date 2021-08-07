@@ -15,7 +15,7 @@ def lista():
     if session.get('user_id') is not None:
         db = get_db()
         devices = db.execute(
-            'SELECT address, advtype, rssi, timestamp'
+            'SELECT *'
             ' FROM device'
         ).fetchall()
         return render_template('mapa/lista.html', devices=devices)
@@ -24,6 +24,5 @@ def lista():
 
 @bp.route('/lista/detalle/<device>', methods=['POST'])
 def detalle(device=None):
-    print('----------_>', device)
     datatypes = getDataTypeByDeviceID(device)
     return render_template('mapa/datatypes.html', datatypes=datatypes)
