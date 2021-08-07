@@ -103,3 +103,14 @@ def insertDataType(device, tipo, raw):
     )
 
     db.commit()
+
+def getDataTypeByDeviceID(device_id):
+    db = get_db()
+
+    cursor = db.execute(
+        'SELECT * FROM datatype WHERE device = ?', (device_id,)
+    )
+
+    datatypes = cursor.fetchall()
+    print(datatypes)
+    return datatypes

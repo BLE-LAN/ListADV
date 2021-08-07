@@ -1,0 +1,12 @@
+
+{% if not datatypes %}
+    <p>This device have not data types</p>
+{% else %}
+    {% for datatype in datatypes %}
+        type {{ datatype.type }}
+        <br>
+        raw {{ datatype.raw }}
+        <br>
+    {% endfor %}
+
+{% endif %}

@@ -1,11 +1,12 @@
 from flask import (
-    Blueprint, render_template, session, redirect, url_for
+    Blueprint, render_template, session, redirect, url_for, request, jsonify
 )
 
 from werkzeug.exceptions import abort
 
 from listadv.auth import login_required
 from listadv.db import get_db
+from listadv.db_access import getDataTypeByDeviceID
 
 bp = Blueprint('mapa', __name__, url_prefix='/mapa')
 
@@ -20,3 +21,9 @@ def lista():
         return render_template('mapa/lista.html', devices=devices)
     else:
         return redirect(url_for('auth.login'))
+
+@bp.route('/lista/detalle/<device>', methods=['POST'])
+def detalle(device=None):
+    print('----------_>', device)
+    datatypes = getDataTypeByDeviceID(device)
+    return render_template('mapa/datatypes.html', datatypes=datatypes)
