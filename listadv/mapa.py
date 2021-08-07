@@ -1,26 +1,47 @@
 from flask import (
-    Blueprint, render_template, session, redirect, url_for, request, jsonify
+    Blueprint, render_template, session, redirect, url_for, request, jsonify, current_app
 )
 
 from werkzeug.exceptions import abort
 
 from listadv.auth import login_required
 from listadv.db import get_db
-from listadv.db_access import getDataTypeByDeviceID
+from listadv.db_access import *
 
 bp = Blueprint('mapa', __name__, url_prefix='/mapa')
 
-@bp.route('/lista', methods=('GET', 'POST'))
+@bp.route('/lista', methods=['GET'])
 def lista():
-    if session.get('user_id') is not None:
-        db = get_db()
-        devices = db.execute(
-            'SELECT *'
-            ' FROM device'
-        ).fetchall()
-        return render_template('mapa/lista.html', devices=devices)
-    else:
+    if session.get('user_id') is None:
         return redirect(url_for('auth.login'))
+
+    PAGE_SIZE = current_app.config['PAGE_SIZE']
+
+    total_records = countAllDevices()
+
+    num_paginas = (total_records // PAGE_SIZE) + (total_records % PAGE_SIZE)
+
+    devices = getDevicePage(0, PAGE_SIZE)
+
+    return render_template('mapa/basetable.html', devices=devices, num_paginas=num_paginas, actual=1)
+
+@bp.route('/lista/pagina/<int:pagina>', methods=['GET', 'POST'])
+def pagina(pagina=None):
+    
+    PAGE_SIZE = current_app.config['PAGE_SIZE']
+
+    total_records = countAllDevices()
+
+    num_paginas = (total_records // PAGE_SIZE) + (total_records % PAGE_SIZE)
+
+    if (pagina <= 0) or (pagina > num_paginas):
+        pagina = 1
+
+    offset = PAGE_SIZE * (pagina - 1)
+
+    devices = getDevicePage(offset, PAGE_SIZE)
+
+    return render_template('mapa/lista.html', devices=devices, num_paginas=num_paginas, actual=pagina)
 
 @bp.route('/lista/detalle/<device>', methods=['POST'])
 def detalle(device=None):

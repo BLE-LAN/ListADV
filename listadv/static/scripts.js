@@ -13,3 +13,18 @@ function obtener_detalle(objButton)
       error: function () { console.log(error) }
   }); 
 }
+
+function obtener_pagina(objLink) 
+{
+  let page = objLink.getAttribute('value')
+  let devicestable = document.getElementById("devicestable");
+  $.ajax({
+      type: 'POST',
+      url: '/mapa/lista/pagina/' + page,
+      success: function (response)
+      {
+        devicestable.innerHTML = response
+      },
+      error: function () { console.log(error) }
+  }); 
+}

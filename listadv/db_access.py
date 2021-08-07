@@ -88,6 +88,22 @@ def insertDevice(address, advtype, rssi, timestamp):
 
     db.commit()
 
+def countAllDevices():
+    db = get_db()
+    cursor = db.execute('SELECT COUNT(*) FROM device').fetchone()
+    return cursor[0]
+
+def getDevicePage(offset, cantidad):
+    db = get_db()
+
+    cursor = db.execute(
+        'SELECT address, advtype, rssi, timestamp '
+        'FROM device '
+        'LIMIT ?, ?',
+        (offset, cantidad)
+    )
+
+    return cursor.fetchall()
 
 '''
     datatype table

@@ -1,38 +1,51 @@
-{% extends 'base.html' %}
-
-{% block header %}
-  <h1>{% block title %}Devices{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-
-
- 
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Address</th>
-        <th scope="col">Type</th>
-        <th scope="col">RSSI</th>
-        <th scope="col">Timestamp</th>
-        <th scope="col">Data Types</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for device in devices %}
+<div id="devicestable">
+  <div class="table-responsive text-center">
+    <table class="table table-striped">
+      <caption>List of devices. Press 'Show' for display the ADV data.</caption>
+      <thead>
         <tr>
-          <th scope="row">{{ device['address'] }}</th>
-          <td>{{ device['advtype'] }}</td>
-          <td>{{ device['rssi'] }}</td>
-          <td>{{ device['timestamp'] }}</td>
-          <td>
-            <button onclick="obtener_detalle(this)" value="{{ device['id'] }}">Do Flip</button>
-          </td>
+          <th scope="col">Address</th>
+          <th scope="col">Type</th>
+          <th scope="col">RSSI</th>
+          <th scope="col">Timestamp</th>
+          <th scope="col">Data Types</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
+      </thead>
+      <tbody>
+        {% for device in devices %}
+          <tr>
+            <th scope="row">{{ device['address'] }}</th>
+            <td>{{ device['advtype'] }}</td>
+            <td>{{ device['rssi'] }}</td>
+            <td>{{ device['timestamp'] }}</td>
+            <td>
+              <button 
+                onclick="obtener_detalle(this)" 
+                value="{{ device['id'] }}"
+                class="thisIsAButton"> Show </button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <nav>
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="#" value="1" onclick="obtener_pagina(this)">&laquo;</a></li>
+          {% for num in range(1, num_paginas+1)%}
+            {% if num == actual %}
+              <li class="page-item active">
+                <a class="page-link" href="#" value="{{ num }}" onclick="obtener_pagina(this)">{{ num }}</a></li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="#" value="{{ num }}" onclick="obtener_pagina(this)">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
+          <li class="page-item">
+            <a class="page-link" href="#" value="{{ num_paginas }}" onclick="obtener_pagina(this)">&raquo;</a></li>
+        </ul>
+    </nav>
+  </div>
+</div>
 {% endblock %}
-

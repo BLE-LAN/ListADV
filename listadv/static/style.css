@@ -15,7 +15,7 @@ body {
 /*
     NAV
 */
-nav { 
+.mynav { 
     color: white;
     background: #2b2b2c;
     display: flex;
@@ -23,23 +23,23 @@ nav {
     padding: 10px;
     border-radius: 5px;
 }
-nav h1 {
+.mynav h1 {
     color: white;
     flex: auto;
     margin: 0;
 }
-nav ul { 
+.mynav ul { 
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0; 
 }
-nav ul li a, nav ul li span, header .action {
+.mynav ul li a, .mynav ul li span, header .action {
     color: #FFAA00;
     display: block;
     padding: 0.5rem; 
 }
-nav img {
+.mynav img {
     max-width: 110%;
     border-radius: 50%;
 }
@@ -129,4 +129,5 @@ input[type=submit] {
     background: linear-gradient(to bottom, #634b30 5%, #c08103 100%);
     background: -webkit-linear-gradient(to bottom, #634b30 5%, #c08103 100%);
     text-decoration: none;
+    color: #ffffff;
 }
