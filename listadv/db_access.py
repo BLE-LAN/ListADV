@@ -97,7 +97,7 @@ def getDevicePage(offset, cantidad):
     db = get_db()
 
     cursor = db.execute(
-        'SELECT address, advtype, rssi, timestamp '
+        'SELECT id, address, advtype, rssi, timestamp '
         'FROM device '
         'LIMIT ?, ?',
         (offset, cantidad)

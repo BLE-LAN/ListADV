@@ -1,0 +1,14 @@
+attrs==21.2.0
+click==8.0.1
+Flask==2.0.1
+flask-expects-json==1.5.0
+Flask-JWT-Extended==4.2.3
+itsdangerous==2.0.1
+Jinja2==3.0.1
+jsonschema==3.2.0
+MarkupSafe==2.0.1
+marshmallow==3.13.0
+PyJWT==2.1.0
+pyrsistent==0.18.0
+six==1.16.0
+Werkzeug==2.0.1

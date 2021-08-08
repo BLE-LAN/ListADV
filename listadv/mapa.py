@@ -43,7 +43,7 @@ def pagina(pagina=None):
 
     return render_template('mapa/lista.html', devices=devices, num_paginas=num_paginas, actual=pagina)
 
-@bp.route('/lista/detalle/<device>', methods=['POST'])
+@bp.route('/lista/detalle/int:<device>', methods=['POST'])
 def detalle(device=None):
     datatypes = getDataTypeByDeviceID(device)
     return render_template('mapa/datatypes.html', datatypes=datatypes)
