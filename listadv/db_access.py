@@ -105,6 +105,19 @@ def getDevicePage(offset, cantidad):
 
     return cursor.fetchall()
 
+def getDeviceAddress(id):
+    db = get_db()
+
+    row = db.execute(
+        'SELECT address FROM device WHERE id = ?', (id,)
+    ).fetchone()
+
+    if row is not None:
+        return row['address']
+    else:
+        return None
+    
+
 '''
     datatype table
 '''

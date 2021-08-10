@@ -1,4 +1,6 @@
 
+<h2>Device {{ address }} data</h2>
+
 {% if not datatypes %}
     <p>This device have not data types</p>
 {% else %}
@@ -7,6 +9,6 @@
         <br>
         raw {{ datatype.raw }}
         <br>
-    {% endfor %} 
+    {% endfor %}    
 
 {% endif %}

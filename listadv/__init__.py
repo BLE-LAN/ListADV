@@ -19,7 +19,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'listadv.sqlite'),
         JWT_ACCESS_TOKEN_EXPIRES = ACCESS_EXPIRES,
-        PAGE_SIZE = 2
+        PAGE_SIZE = 4
     )
 
     if test_config is None:
