@@ -1,14 +1,12 @@
 
-<h2>Device {{ address }} data</h2>
+<h1>{{ address }}</h1>
 
 {% if not datatypes %}
     <p>This device have not data types</p>
 {% else %}
     {% for datatype in datatypes %}
-        type {{ datatype.type }}
-        <br>
-        raw {{ datatype.raw }}
-        <br>
+        <p style="font-weight: bold; margin-bottom: 0px;">{{ datatype.type }}</p>
+        <p class="raw">{{ datatype.raw }}</p>
     {% endfor %}    
 
 {% endif %}

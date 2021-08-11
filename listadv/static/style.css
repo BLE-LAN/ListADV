@@ -104,6 +104,13 @@ input[type=submit] {
     background: #f2cc6d;
 }
   
+.raw { 
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgb(240, 247, 255);
+    margin-bottom: 5px;
+}
+
 /*
 .post > header { display: flex; align-items: flex-end; font-size: 0.85em; }
 .post > header > div:first-of-type { flex: auto; }
@@ -131,3 +138,6 @@ input[type=submit] {
     text-decoration: none;
     color: #ffffff;
 }
+
+
+
