@@ -23,6 +23,9 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/login', methods=['POST'])
 def login():
+	if request.json is None:
+		return jsonify("No JSON data"), 400
+	
 	username = request.json.get("username", None)
 	password = request.json.get("password", None)
 
@@ -99,8 +102,9 @@ def adddevices():
 			deviceID = lastInsertRowId()
 
 			# Insertar tipos desconocidos (dados en raw)
-			for unkown in device['unknows']:
-				insertDataType(deviceID, unkown['type'], unkown['raw'])
+			if 'unknows' in device:
+				for unkown in device['unknows']:
+					insertDataType(deviceID, unkown['type'], unkown['raw'])
 
 			# Insertar tipos conocidos
 			datatypes_dic = {
