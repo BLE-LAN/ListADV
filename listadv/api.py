@@ -102,8 +102,8 @@ def adddevices():
 			deviceID = lastInsertRowId()
 
 			# Insertar tipos desconocidos (dados en raw)
-			if 'unknows' in device:
-				for unkown in device['unknows']:
+			if 'unknowns' in device:
+				for unkown in device['unknowns']:
 					insertDataType(deviceID, unkown['type'], unkown['raw'])
 
 			# Insertar tipos conocidos
