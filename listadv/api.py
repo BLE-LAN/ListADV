@@ -11,6 +11,8 @@ from . import (
 	auth, jwt_ptr 
 )
 
+from listadv.util import data_type_value_to_description
+
 from listadv.db import get_db
 from listadv import util
 from listadv.db_access import *
@@ -104,7 +106,10 @@ def adddevices():
 			# Insertar tipos desconocidos (dados en raw)
 			if 'unknowns' in device:
 				for unkown in device['unknowns']:
-					insertDataType(deviceID, unkown['type'], unkown['raw'])
+					insertDataType(
+						deviceID, 
+						data_type_value_to_description(unkown['type']), 
+						unkown['raw'])
 
 			# Insertar tipos conocidos
 			datatypes_dic = {
