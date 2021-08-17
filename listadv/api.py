@@ -91,14 +91,18 @@ def adddevices():
 	db = get_db()
 	devices = request_data['devices']
 
+	updates = 0
+	news = 0
+
 	for device in devices:
 
 		deviceId = getDeviceIdByAddress(device['address'])
 
 		if deviceId is not None:
 			updateDevice(deviceId, device['rssi'], device['timestamp'])
-
+			updates += 1
 		else:
+			news += 1
 			insertDevice(device['address'], device['advtype'], device['rssi'], device['timestamp'])
 
 			deviceID = lastInsertRowId()
@@ -129,7 +133,7 @@ def adddevices():
 				if len(value) > 0:
 					insertDataType(deviceID, key, value)
 
-	return request_data
+	return jsonify(added=news, updated=updates)
 
 @jwt_ptr.expired_token_loader
 def remove_expired_token(jwt_header, jwt_payload):

@@ -19,7 +19,10 @@ def lista():
 
     total_records = countAllDevices()
 
-    num_paginas = (total_records // PAGE_SIZE) + (total_records % PAGE_SIZE)
+    num_paginas = (total_records // PAGE_SIZE)
+
+    if (total_records % PAGE_SIZE) > 0:
+        num_paginas += 1
 
     devices = getDevicePage(0, PAGE_SIZE)
 
@@ -27,12 +30,14 @@ def lista():
 
 @bp.route('/lista/pagina/<int:pagina>', methods=['GET', 'POST'])
 def pagina(pagina=None):
-    
-    PAGE_SIZE = current_app.config['PAGE_SIZE']
-
     total_records = countAllDevices()
 
-    num_paginas = (total_records // PAGE_SIZE) + (total_records % PAGE_SIZE)
+    PAGE_SIZE = current_app.config['PAGE_SIZE']
+
+    num_paginas = (total_records // PAGE_SIZE)
+
+    if (total_records % PAGE_SIZE) > 0:
+        num_paginas += 1
 
     if (pagina <= 0) or (pagina > num_paginas):
         pagina = 1
