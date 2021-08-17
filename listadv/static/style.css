@@ -4,6 +4,7 @@ body {
     background: linear-gradient(to left, #636FA4, #e8e7e2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
+
 /*
     MAIN CONTAINER
 */
@@ -11,6 +12,7 @@ body {
     margin: 0px auto;
     max-width: 1000px;
 }
+
 
 /*
     NAV
@@ -28,7 +30,11 @@ body {
     flex: auto;
     margin: 0;
 }
-.mynav ul { 
+.mynav h1 a {
+    color: white;
+    text-decoration: none;
+}
+ ul { 
     display: flex;
     list-style: none;
     margin: 0;
@@ -43,6 +49,7 @@ body {
     max-width: 110%;
     border-radius: 50%;
 }
+
 
 /*
     DEVICES CONTENT CONTAINER
@@ -72,6 +79,7 @@ body {
     margin-bottom: 1em;
 }
 /*.content:last-child { margin-bottom: 0; }*/
+
 
 /*
     GENERAL STYLE
@@ -111,13 +119,15 @@ input[type=submit] {
     margin-bottom: 5px;
 }
 
-/*
-.post > header { display: flex; align-items: flex-end; font-size: 0.85em; }
-.post > header > div:first-of-type { flex: auto; }
-.post > header h1 { font-size: 1.5em; margin-bottom: 0; }
-.post .about { color: slategray; font-style: italic; }
-.post .body { white-space: pre-line; }
-*/
+.avisoboton {
+    padding: 5px;
+    background-color: #a6d1d8;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border: 1px solid #288796;
+    border-radius: 5px;
+}
+
 
 /*
     LINK LIKE A BUTTON
