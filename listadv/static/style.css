@@ -31,8 +31,12 @@ body {
     margin: 0;
 }
 .mynav h1 a {
-    color: white;
+    color: #FFAA00;
     text-decoration: none;
+}
+.mynav a:hover {
+    /*color: white;*/
+    background-color: #554118;
 }
  ul { 
     display: flex;
@@ -150,4 +154,21 @@ input[type=submit] {
 }
 
 
+/*
+    INDEX STYLE
+*/
 
+.bash-style {
+    /*margin-bottom: 2.5em;*/
+    white-space: pre-line;
+    padding-right: 6em;
+    position: relative;
+    overflow: auto;
+    border-radius: 3px;
+    line-height: 1.45;
+    padding: 1em;
+    color: #000;
+    background: #fafafa !important;
+    border: none !important;
+    font-family: "JetBrains Mono",Menlo,Courier,monospace;
+}

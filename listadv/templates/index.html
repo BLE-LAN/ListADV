@@ -1,9 +1,46 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Index{% endblock %}</h1>
+  <h1>{% block title %}About{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    <p>// TODO - intro a ListADV</p>
+    <p>ListADV es una app programada con Flask cuyo objetivo es listar los dispositivos
+      BLE encontrados mediante mensajes de ADV. Los ADV se reciben en formato JSON usando la API.</p>
+{% endblock %}
+
+{% block content_optional %}
+  <section class="content">
+    <h3>Lista de los BLE</h3>
+    <p>
+      La tabla de los BLE se encuentra en la ruta <a href="{{ url_for('mapa.lista') }}">/mapa/lista</a>,
+      es accesible tras loguearse.
+    </p>
+  </section>
+  <section class="content">
+    <h3>API</h3>
+    Para realizar las peticiones se ha optado por la herramienta <a href="https://httpie.io/">HTTPie</a> con
+    el plugin <a href="https://github.com/teracyhq/httpie-jwt-auth">httpie-jwt-auth</a>.
+    <br><br>
+    <p style="font-weight: bold;"> Login </p>
+    <pre class="bash-style"> $ https POST https://nyaboron.pythonanywhere.com/api/login username="$USER" password="$PASS"</pre>
+    <pre class="bash-style">
+      HTTP/1.0 200 OK
+      Content-Length: 289
+      Content-Type: application/json
+
+      { "access_token": "YOUR_JWT" }
+    </pre>
+
+    <p style="font-weight: bold;"> Enviar los ADV </p>
+    <pre class="bash-style"> $ https --auth-type=jwt --auth="YOUR_JWT" POST https://nyaboron.pythonanywhere.com/api/adddevices < input_adv.json
+    </pre>
+    <pre class="bash-style">
+      HTTP/1.0 200 OK
+      Content-Length: 34
+      Content-Type: application/json
+      
+      { "added": 2, "updated": 0}
+    </pre>
+  </section>
 {% endblock %}
