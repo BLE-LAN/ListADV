@@ -31,6 +31,15 @@ Install the requirements.txt or add manually the packages listed in [Dependencie
   python -m pip install -r ListADV/requirements.txt
 ```
 
+In the root repo folder setup some env variables and init de database. In production FLASK_ENV must not be set. The command 'init-db' is a custom command for delete all the tables and create the sqlite file if it is needed.
+
+```
+  export FLAS_APP=listadv
+  export FLASK_ENV=development
+  flask init-db
+  flask run
+```
+
 ## API
 
 The steps to send a list of devices with the API are (I use the HTTPie tool but curl or another is ok):
