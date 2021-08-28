@@ -55,5 +55,9 @@ data_value_description_dict = {
 
 
 def data_type_value_to_description(value):
+    integer_value = int(value, base=16)
+    if (integer_value in data_value_description_dict) == False:
+        return value
+
     return data_value_description_dict[int(value, base=16)]
 

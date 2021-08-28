@@ -2,7 +2,7 @@ import sqlite3
 import click
 
 from listadv.db import get_db
-
+from listadv.util import data_type_value_to_description
 
 ''''
     utilities functions
@@ -98,16 +98,15 @@ def updateDevice(id, adv):
 
 
     for adv_data in adv['unknowns']:
-
         data_is_inserted = False
         for device_data in device_datatype_cursor:
-            if adv_data['type'] == device_data['type']:
+            if data_type_value_to_description(adv_data['type']) == device_data['type']:
                 data_is_inserted = True
                 break
 
         if not data_is_inserted:
-            insertDataType(id, adv_data['type'], adv_data['raw'])
-                    
+            insertDataType(id, data_type_value_to_description(adv_data['type']), adv_data['raw'])
+    
 
     db.execute(
         'UPDATE device' 
