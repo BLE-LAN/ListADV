@@ -73,9 +73,6 @@ def getDeviceIdByAddress(address):
 def updateDevice(id, adv):
     db = get_db()
 
-    print(id)
-    print(adv)
-
     # Add new datatype
     device_datatype_cursor = db.execute(
         'SELECT type, raw FROM datatype WHERE device = ?', (id,)
