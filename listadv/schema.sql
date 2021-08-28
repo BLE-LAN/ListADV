@@ -24,12 +24,3 @@ CREATE TABLE user (
   password TEXT NOT NULL,
   token TEXT UNIQUE
 );
-
-INSERT INTO device as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:1E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021');
-INSERT INTO device as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:2E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021');
-INSERT INTO device as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:3E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021');
-INSERT INTO device as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:4E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021');
-INSERT INTO device as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:5E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021');
-INSERT INTO device as d (address, advtype, rssi, timestamp) VALUES ('C1:BB:C2:C9:71:6E', 'ConnectableUndirected', -56, 'Tue Jul 27 10:15:20 2021');
-
-INSERT INTO datatype (device, type, raw) VALUES (1, 'completename', 'best nombre para un BLE: uwu');

@@ -65,14 +65,58 @@ def getDeviceIdByAddress(address):
     else:
         return None
 
-def updateDevice(id, rssi, timestamp):
+'''
+    TODO REFACTOR 
+    This code is too wired, but before remove this need refactor JSON schema and 
+    for the moment dont have time to update the Parser and then refactor this app.
+'''
+def updateDevice(id, adv):
     db = get_db()
+
+    print(id)
+    print(adv)
+
+    # Add new datatype
+    device_datatype_cursor = db.execute(
+        'SELECT type, raw FROM datatype WHERE device = ?', (id,)
+    ).fetchall()
+
+    datatypes_dic = {
+        'completename' : '',
+        'uuids' : ''
+    }
+
+    # TODO REFACTOR 
+    row = db.execute(
+        'SELECT type, raw FROM datatype WHERE device = ? AND type = ?', (id, 'completename')
+    ).fetchone()
+    if not row and 'completename' in adv:
+        insertDataType(id, 'completename', adv['completename'])
+
+    row = db.execute(
+        'SELECT type, raw FROM datatype WHERE device = ? AND type = ?', (id, 'uuids')
+    ).fetchone()
+    if not row and 'uuids' in adv:
+        insertDataType(id, 'uuids', adv['uuids'])
+
+
+    for adv_data in adv['unknowns']:
+
+        data_is_inserted = False
+        for device_data in device_datatype_cursor:
+            if adv_data['type'] == device_data['type']:
+                data_is_inserted = True
+                break
+
+        if not data_is_inserted:
+            insertDataType(id, adv_data['type'], adv_data['raw'])
+                    
 
     db.execute(
         'UPDATE device' 
-        ' SET rssi = ?, timestamp = ?'
+        ' SET rssi = ?, timestamp = ?, advtype = ?'
         ' WHERE id = ?',
-        (rssi, timestamp, id)
+        (adv['rssi'], adv['timestamp'], adv['advtype'], id)
     )
 
     db.commit()

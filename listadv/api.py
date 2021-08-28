@@ -99,7 +99,7 @@ def adddevices():
 		deviceId = getDeviceIdByAddress(device['address'])
 
 		if deviceId is not None:
-			updateDevice(deviceId, device['rssi'], device['timestamp'])
+			updateDevice(deviceId, device)
 			updates += 1
 		else:
 			news += 1
